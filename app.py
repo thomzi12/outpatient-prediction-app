@@ -1,22 +1,17 @@
-from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-# from tensorflow import keras
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
+# import tensorflow as tf
+# from tensorflow.keras.models import Sequential
 import streamlit as st
-# To make things easier later, we're also importing numpy and pandas for
-# working with sample data.
-# import numpy as np
 import pandas as pd
 import pickle
 
-# PATH = '.'
-PATH = '/content/drive/My Drive/wang_pythong'
+PATH = '.'
 
 logit_model = pickle.load(open(PATH + "/models/logistic_model.pkl", 'rb'))
-rf_model = pickle.load(open(PATH + "/models/RF_model.pkl", 'rb'))
+# rf_model = pickle.load(open(PATH + "/models/RF_model.pkl", 'rb'))
 # nn_model = pickle.load(open(PATH+"/models/NN_model.pkl", 'rb'))
-nn_model = tf.keras.models.load_model(PATH + "/models/NN_model/1/")
+# nn_model = tf.keras.models.load_model(PATH + "/models/NN_model/1/")
 
 
 _anticipated_cols = ['fnstatus2_Independent',
@@ -40,7 +35,7 @@ _anticipated_cols = ['fnstatus2_Independent',
                      'diabetes_new_No',
                      'diabetes_new_Yes']
 
-_NN_threshold = .2
+# _NN_threshold = .2
 
 
 def probs_to_pred(probs, threshold=0.5):
@@ -109,8 +104,8 @@ user_input['diabetes_new'] = st.selectbox(
 user_input_df = input_dict_to_df(user_input)
 
 LR_probs = logit_model.predict_proba(user_input_df)[0][1]
-RF_probs = rf_model.predict_proba(user_input_df)[0][1]
-NN_probs = nn_model.predict(user_input_df)[0][0]
+# RF_probs = rf_model.predict_proba(user_input_df)[0][1]
+# NN_probs = nn_model.predict(user_input_df)[0][0]
 
 st.markdown(
     """
@@ -125,12 +120,9 @@ This patient's attributes:
 - dyspnea_new: *{dyspnea_new}*
 - Has diabetes: *{diabetes_new}*
 
-Here are the predictions for this patient:
-- The Logistic regression model predicts that {LR_probs_pred}
-  - Predicted probability of successful outpatient treatment = {LR_probability:.1f}%
-- The Random Forest model predicts that {RF_probs_pred}
-  - Predicted probability of successful outpatient treatment =  {RF_probability:.1f}%
-- The Neural Network model predicts that {NN_probs_pred} (Score = {NN_pred:.2f}, Threshold = {NN_threshold})
+We found that a logistic regression model had a better AUC than a Random Forests or three-layer neural network. All three performed better than a baseline prediction using only patient ASA score to predict outcomes ([AUC chart](https://imgur.com/a/1xcQGgJ)).
+
+The Logistic regression model predicts that {LR_probs_pred} According to the model, the predicted probability of successful outpatient treatment = {LR_probability:.1f}%.
 """.format(
         fnstatus2=user_input['fnstatus2'],
         hxcopd=user_input['hxcopd'],
@@ -142,14 +134,10 @@ Here are the predictions for this patient:
         dyspnea_new=user_input['dyspnea_new'],
         diabetes_new=user_input['diabetes_new'],
         LR_probability=LR_probs * 100,
-        LR_probs_pred=probs_to_pred(LR_probs),
-        RF_probability=RF_probs * 100,
-        RF_probs_pred=probs_to_pred(RF_probs),
-        NN_pred=NN_probs,
-        NN_threshold=_NN_threshold,
-        NN_probs_pred=probs_to_pred(NN_probs, threshold=_NN_threshold)
+        LR_probs_pred=probs_to_pred(LR_probs)
+        # ,RF_probability=RF_probs * 100,
+        # RF_probs_pred=probs_to_pred(RF_probs),
+        # NN_pred=NN_probs,
+        # NN_threshold=_NN_threshold,
+        # NN_probs_pred=probs_to_pred(NN_probs, threshold=_NN_threshold)
     ))
-
-# user_input['diabetes_new'] = 'No'
-# user_input_df = input_dict_to_df(user_input)
-# NN_probs = nn_model.predict_proba(user_input_df)[0][0]
