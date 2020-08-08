@@ -1,1 +1,0 @@
-# outpatient-prediction-app
