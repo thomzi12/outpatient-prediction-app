@@ -55,49 +55,48 @@ def input_dict_to_df(user_input_dict, anticipated_cols=_anticipated_cols, expect
     return user_input_df
 
 
-st.title("Predicting if Outpatient treatment is a good fit")
+st.title("Predicting Safe Outpatient ACDF")
 st.markdown(
     """
-This app allows the user to select different patient attributes and see if
-outpatient treatment is recommended.
+This app uses patient characteristics to determine if outpatient treatment is recommended
 """)
 
 user_input = dict()
 
 user_input['fnstatus2'] = st.selectbox(
-    "Financial Status?",
+    "Functional Status?",
     ['Independent', 'Partially Dependent', 'Totally Dependent', 'Unknown']
 )
 user_input['hxcopd'] = st.selectbox(
-    "Has COPD?",
+    "COPD?",
     ['Yes', 'No']
 )
 user_input['hypermed'] = st.selectbox(
-    "hypermed?",
+    "Hypertension?",
     ['Yes', 'No']
 )
 user_input['elderly'] = st.selectbox(
-    "Is elderly?",
+    "Age > 65?",
     ['elderly', 'not elderly']
 )
 user_input['asa_three'] = st.selectbox(
-    "Is ASA Score more than 3?",
+    "ASA > 3?",
     ['not asa 3', 'asa 3']
 )
 user_input['anemia'] = st.selectbox(
-    "Is anemic?",
+    "Anemia (Hct < 30)?",
     ['anemia', 'no anemia']
 )
 user_input['hypoalb'] = st.selectbox(
-    "hypoalb?",
+    "Hypoalbuminemia? (<3.5)?",
     ['Normal', 'Low']
 )
 user_input['dyspnea_new'] = st.selectbox(
-    "dyspnea_new?",
+    "Dyspnea?",
     ['Yes', 'No']
 )
 user_input['diabetes_new'] = st.selectbox(
-    "Has diabetes?",
+    "Diabetes?",
     ['Yes', 'No']
 )
 
@@ -110,19 +109,17 @@ LR_probs = logit_model.predict_proba(user_input_df)[0][1]
 st.markdown(
     """
 This patient's attributes:
-- Financial Status: *{fnstatus2}*
-- Has COPD: *{hxcopd}*
-- Hypermed: *{hypermed}*
-- Is elderly: *{elderly}*
-- Is ASA Score more than 3? *{asa_three}*
-- Is anemic: *{anemia}*
-- hypoalb: *{hypoalb}*
-- dyspnea_new: *{dyspnea_new}*
-- Has diabetes: *{diabetes_new}*
+- Functional Status?: *{fnstatus2}*
+- COPD?: *{hxcopd}*
+- Hypertension?: *{hypermed}*
+- Age > 65?: *{elderly}*
+- ASA > 3?: *{asa_three}*
+- Anemia (Hct < 30)?: *{anemia}*
+- Hypoalbuminemia? (<3.5)?: *{hypoalb}*
+- Dyspnea?: *{dyspnea_new}*
+- Diabetes: *{diabetes_new}*
 
-We found that a logistic regression model had a better AUC than a Random Forests or three-layer neural network. All three performed better than a baseline prediction using only patient ASA score to predict outcomes ([AUC chart](https://imgur.com/a/1xcQGgJ)).
-
-The Logistic regression model predicts that {LR_probs_pred} According to the model, the predicted probability of successful outpatient treatment = {LR_probability:.1f}%.
+The Logistic regression model predicts that {LR_probs_pred}.
 """.format(
         fnstatus2=user_input['fnstatus2'],
         hxcopd=user_input['hxcopd'],
