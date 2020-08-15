@@ -119,7 +119,7 @@ This patient's attributes:
 - Dyspnea?: *{dyspnea_new}*
 - Diabetes: *{diabetes_new}*
 
-The Logistic regression model predicts that {LR_probs_pred}.
+The Logistic regression model predicts that {LR_probs_pred}
 """.format(
         fnstatus2=user_input['fnstatus2'],
         hxcopd=user_input['hxcopd'],
