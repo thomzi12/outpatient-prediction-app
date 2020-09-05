@@ -4,4 +4,4 @@ Heroku app that predicts probability of a successful outpatient surgery given us
 
 Here's a screenshot of a recent version of the app: 
 
-![](https://imgur.com/a/nFpp1Tm)
+![Website Image](https://i.imgur.com/6JrRj6D.png)
